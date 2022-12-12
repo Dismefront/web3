@@ -5,7 +5,20 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
+<h:head>
+
+</h:head>
+<h:body>
+    <h1>Ромайкин Эрик P32091 - 913456</h1>
+    <div>
+        <h:link outcome="relocate">
+            <h:commandButton value="Go To App"/>
+        </h:link>
+    </div>
+    <div id="time">
+        <div id="clock"></div>
+        <div id="date"></div>
+    </div>
+    <h:outputScript library="js" name="clock.js"/>
+</h:body>
 </html>

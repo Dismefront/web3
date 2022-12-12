@@ -1,5 +1,8 @@
 let board = null;
 initBoard();
+let radius = null;
+
+updateRadiusCheck();
 
 function getMouseCoords(e) {
     let cPos = board.getCoordsTopLeftCorner(e),
@@ -10,7 +13,7 @@ function getMouseCoords(e) {
     return new JXG.Coords(JXG.COORDS_BY_SCREEN, [dx, dy], board);
 }
 
-function initBoard(radius = null) {
+function initBoard(obj) {
     if (board)
         JXG.JSXGraph.freeBoard(board);
 
@@ -18,6 +21,20 @@ function initBoard(radius = null) {
         "board",
         { boundingbox: [-6, 6, 6, -6], axis: true, showNavigation: false }
     );
+
+    if (!obj)
+        return;
+
+    obj.forEach(x => {
+        if (x.r === radius) {
+            if (x.result)
+                board.create('point', [x.x, x.y],
+                    {fixed: true, size: 1, name: "", color: "green"});
+            else
+                board.create('point', [x.x, x.y],
+                    {fixed: true, size: 1, name: "", color: "red"});
+        }
+    })
 
     board.on("down", (e) => {
         if (radius == null)
@@ -34,12 +51,24 @@ function initBoard(radius = null) {
         else
             $("#bounds_error").remove();
 
-        board.create('point', [c1, c2],
-            {fixed: true, size: 1, name: "A"});
+        addPoint([
+            {
+                name: "x",
+                value: c1.toString()
+            },
+            {
+                name: "y",
+                value: c2.toString()
+            },
+            {
+                name: "r",
+                value: radius.toString()
+            },
+        ]);
     });
 }
 
-function updateRadiusCheck(radius) {
+function updateRadiusCheck() {
     $("#form\\:check_1")[0].checked = (radius === 1);
     $("#form\\:check_2")[0].checked = (radius === 2);
     $("#form\\:check_3")[0].checked = (radius === 3);
@@ -47,7 +76,10 @@ function updateRadiusCheck(radius) {
     $("#form\\:check_5")[0].checked = (radius === 5);
 }
 
-function drawGraph(radius) {
+function drawGraph(obj) {
+    if (radius == null || !obj)
+        return;
+    initBoard(obj);
     graphparams = {
         fixed: true,
         vertices: { visible: false },
@@ -62,13 +94,12 @@ function drawGraph(radius) {
     };
     board.create('polygon', [[0, 0], [0, radius], [radius, radius], [radius, 0]], graphparams);
     board.create('ellipse', [[0, 0], [0, 0], [radius, 0], 0, -Math.PI / 2], graphparams);
-    board.create('polygon', [[0, 0], [0, -radius], [-radius, 0]], graphparams)
+    board.create('polygon', [[0, 0], [0, -radius], [-radius, 0]], graphparams);
 }
 
-function handleRedraw(radius) {
-    updateRadiusCheck(radius);
-    initBoard(radius);
-    drawGraph(radius);
+function handleRedraw(checkbox_number) {
+    radius = checkbox_number;
+    updateRadiusCheck();
 }
 
 $("#form\\:check_1").on("click", () => {handleRedraw(1)});

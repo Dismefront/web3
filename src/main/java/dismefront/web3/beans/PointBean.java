@@ -1,9 +1,13 @@
 package dismefront.web3.beans;
 
 import dismefront.web3.data.Attempt;
+import dismefront.web3.data.DataBaseManager;
 import dismefront.web3.util.HitChecker;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.annotation.ManagedProperty;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -21,6 +25,9 @@ public class PointBean implements Serializable {
     private boolean r4 = false;
     private boolean r5 = false;
 
+    @Inject
+    DataBaseManager dbmanager;
+
     public double getR() {
         if (r1)
             return 1;
@@ -33,26 +40,41 @@ public class PointBean implements Serializable {
         return 5;
     }
 
+    public void remoteProcess() {
+        System.out.println("hello");
+        String param1 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("x");
+        String param2 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("y");
+        String param3 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("r");
+        long ex_time = System.nanoTime();
+        HitChecker check;
+        check = new HitChecker(Double.parseDouble(param1), Double.parseDouble(param2), Double.parseDouble(param3));
+        Attempt p = new Attempt();
+        p.setResult(check.result());
+        p.setX(Double.parseDouble(param1));
+        p.setY(Double.parseDouble(param2));
+        p.setR(Double.parseDouble(param3));
+        p.setDate(new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(new Date()));
+        p.setExTime(System.nanoTime() - ex_time);
+        dbmanager.addAttempt(p);
+    }
+
     public void process() {
         long ex_time = System.nanoTime();
         HitChecker check;
         try {
-            check = new HitChecker(getNormalizedX(), Double.parseDouble(y), getR());
+            check = new HitChecker(x, Double.parseDouble(y), getR());
         }
         catch (Exception ex) {
             return;
         }
         Attempt p = new Attempt();
         p.setResult(check.result());
-        p.setX(getNormalizedX());
+        p.setX(x);
         p.setY(Double.parseDouble(y));
         p.setR(getR());
         p.setDate(new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(new Date()));
-        System.out.println(p.getResult() + " " + p.getX() + " " + p.getY() + " " + p.getR() + " " + p.getDate() );
-    }
-
-    public double getNormalizedX() {
-        return x / 10;
+        p.setExTime(System.nanoTime() - ex_time);
+        dbmanager.addAttempt(p);
     }
 
     public double getX() {

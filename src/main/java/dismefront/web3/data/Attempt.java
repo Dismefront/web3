@@ -1,6 +1,6 @@
 package dismefront.web3.data;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "points", schema = "results")
@@ -23,7 +23,7 @@ public class Attempt {
     private Double r;
 
     @Column(name = "ex_time", nullable = false)
-    private Double exTime;
+    private Long exTime;
 
     @Column(name = "date", nullable = false, length = 50)
     private String date;
@@ -36,11 +36,11 @@ public class Attempt {
         this.date = date;
     }
 
-    public Double getExTime() {
+    public Long getExTime() {
         return exTime;
     }
 
-    public void setExTime(Double exTime) {
+    public void setExTime(Long exTime) {
         this.exTime = exTime;
     }
 

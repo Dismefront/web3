@@ -1,4 +1,4 @@
-table[name="result"] {
+#results-table {
     border-width: 1px;
     margin-left: auto;
     margin-right: auto;
@@ -9,13 +9,13 @@ table[name="result"] {
     width: 800px;
 }
 
-table[name="result"] td {
+#results-table td {
     border-width: 1px;
     border-style: solid;
     text-align: center;
 }
 
-table[name="result"] th {
+#results-table th {
     border-width: 3px;
     border-style: solid;
     padding: 5px;
@@ -24,16 +24,20 @@ table[name="result"] th {
     padding-right: 20px;
 }
 
-table[name="result"]::-webkit-scrollbar {
+#results-table::-webkit-scrollbar {
     width: 10px;
 }
 
-table[name="result"]::-webkit-scrollbar-track {
+#results-table::-webkit-scrollbar-track {
     background-color: darkgrey;
     border-radius: 5px;
 }
 
-table[name="result"]::-webkit-scrollbar-thumb {
+#results-table::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     border-radius: 5px;
+}
+
+#last_column {
+    width: 150px;
 }
