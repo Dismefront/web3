@@ -25,6 +25,7 @@ public class ValidateY implements Validator, Serializable {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
         String model = (String) o;
+        model = model.replace(",", ".");
         double parsed = 0;
         try {
             parsed = Double.parseDouble(model);

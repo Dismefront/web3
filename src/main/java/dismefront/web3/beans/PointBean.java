@@ -40,8 +40,11 @@ public class PointBean implements Serializable {
         return 5;
     }
 
+    public String getValidatedY() {
+        return y.replace(",", ".");
+    }
+
     public void remoteProcess() {
-        System.out.println("hello");
         String param1 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("x");
         String param2 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("y");
         String param3 = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("r");
@@ -62,7 +65,7 @@ public class PointBean implements Serializable {
         long ex_time = System.nanoTime();
         HitChecker check;
         try {
-            check = new HitChecker(x, Double.parseDouble(y), getR());
+            check = new HitChecker(x, Double.parseDouble(getValidatedY()), getR());
         }
         catch (Exception ex) {
             return;
@@ -70,7 +73,7 @@ public class PointBean implements Serializable {
         Attempt p = new Attempt();
         p.setResult(check.result());
         p.setX(x);
-        p.setY(Double.parseDouble(y));
+        p.setY(Double.parseDouble(getValidatedY()));
         p.setR(getR());
         p.setDate(new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(new Date()));
         p.setExTime(System.nanoTime() - ex_time);
